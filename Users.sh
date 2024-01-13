@@ -9,30 +9,83 @@ echo -e "Por favor, forneça as seguintes informações:"
 
 read -p "Digite o nome do usuário: " nome
 read -p "Digite o sobrenome do usuário: " sobrenome
-read -p "Digite o setor (Grass, Water, Fire): " setor
+
+# Apresentar opções numeradas para o setor
+echo "Escolha o setor:"
+echo "1. TI"
+echo "2. Comercial"
+echo "3. Outro"
+
+read -p "Digite o número correspondente ao setor desejado: " escolha_setor
+
+# Tratamento de erros ao solicitar informações
+if [ -z "$nome" ] || [ -z "$sobrenome" ] || [ -z "$escolha_setor" ]; then
+    echo "Erro: Todas as informações são necessárias. Saindo..."
+    exit 1
+fi
 
 # Converter o primeiro caractere do nome e sobrenome para maiúscula
 nome=$(echo "$nome" | sed 's/\b\(.\)/\u\1/g')  # \u converte para maiúsculas
 sobrenome=$(echo "$sobrenome" | sed 's/\b\(.\)/\u\1/g')  # \u converte para maiúsculas
 
-# Converter setor para minúsculas para tornar a comparação insensível a maiúsculas/minúsculas
-setor=$(echo "$setor" | tr '[:upper:]' '[:lower:]')
-
 # Defina o email baseado no nome de exibição ou padrão
-nome_exibicao="${nome}.${sobrenome}"
+nome_exibicao="${nome} ${sobrenome}"
 
-# Forçar todas as letras de nome_exibicao para minúsculas
-nome_exibicao=$(echo "$nome_exibicao" | tr '[:upper:]' '[:lower:]')
+# Forçar a primeira letra de nome_exibicao para maiúscula
+nome_exibicao=$(echo "$nome_exibicao" | awk '{for(i=1;i<=NF;i++)$i=toupper(substr($i,1,1)) tolower(substr($i,2));}1')
 
-# Limpar a tela novamente
-clear
+# Defina o nome de exibição no AD baseado em uma convenção específica
+nome_ad="${nome}.${sobrenome}"
 
-# Exibir informações inseridas com variáveis coloridas
-echo -e "\e[1;36mAs seguintes informações foram inseridas:\e[0m"
-echo -e "Nome: \e[1;32m$nome\e[0m"
-echo -e "Sobrenome: \e[1;32m$sobrenome\e[0m"
+# Forçar todas as letras de nome_ad para minúsculas
+nome_ad=$(echo "$nome_ad" | tr '[:upper:]' '[:lower:]')
+
+# Apresentar opções numeradas para a filial
+echo "Escolha a filial:"
+echo "1. Fazenda"
+echo "2. Salseiros"
+
+read -p "Digite o número correspondente à filial desejada: " escolha_filial
+
+# Tratamento de erros ao solicitar informações
+if [ -z "$escolha_filial" ]; then
+    echo "Erro: A escolha da filial é necessária. Saindo..."
+    exit 1
+fi
+
+# Mapear a escolha do usuário para o setor correspondente
+case "$escolha_setor" in
+  1)
+    setor="TI"
+    ou="OU=TI";;
+  2)
+    setor="Comercial"
+    ou="OU=Comercial";;
+  3)
+    read -p "Digite o nome do setor personalizado: " setor
+    ou="OU=$setor";;
+  *)
+    echo "Erro: Escolha inválida para setor."
+    exit 1;;
+esac
+
+# Mapear a escolha da filial para o escritório correspondente
+case "$escolha_filial" in
+  1)
+    filial="Fazenda"
+    escritorio="Fazenda";;
+  2)
+    filial="Salseiros"
+    escritorio="Salseiros";;
+  *)
+    echo "Erro: Escolha inválida para filial."
+    exit 1;;
+esac
+
 echo -e "Setor: \e[1;32m$setor\e[0m"
-echo -e "Nome de Exibição: \e[1;32m$nome_exibicao\e[0m"
+echo -e "Filial: \e[1;32m$filial\e[0m"
+echo -e "Nome de Exibição (AD): \e[1;32m$nome_ad\e[0m"
+echo -e "Nome de Exibição (Computador): \e[1;32m$nome_exibicao\e[0m"
 
 # Pedir confirmação
 read -p "Confirmar a criação do usuário com as informações acima? (y/n): " confirmacao
@@ -45,23 +98,27 @@ fi
 
 # Continuar com a criação do usuário
 case "$setor" in
-  "grass")
-    ou="OU=Grass";;
-  "water")
-    ou="OU=Water";;
-  "fire")
-    ou="OU=Fire";;
+  "comex" | "Comex")
+    ou="OU=Comex";;
+  "comercial" | "Comercial")
+    ou="OU=Comercial";;
+  "ti" | "TI")
+    ou="OU=TI";;
   *)
-    echo "Setor inválido."
+    echo "Erro: Setor inválido."
     exit 1;;
 esac
 
-pw='senha@123'
+# Remover caracteres inválidos para SamAccountName
+sam_account_name=$(echo "$nome_ad" | tr -cd 'A-Za-z0-9' | tr '[:upper:]' '[:lower:]')
 
-pw_encrypted=$(pwsh -Command "ConvertTo-SecureString -AsPlainText '$pw' -Force | ConvertFrom-SecureString")
+# Senha temporária (ajuste conforme necessário)
+senha_temporaria='senha@123'
+
+senha_encriptada=$(pwsh -Command "ConvertTo-SecureString -AsPlainText '$senha_temporaria' -Force | ConvertFrom-SecureString")
 
 pwsh -Command "
-New-ADUser -GivenName '$nome' -Surname '$sobrenome' -Name '$nome_exibicao' -DisplayName '$nome_exibicao' -SamAccountName '$nome.$sobrenome' -UserPrincipalName '$nome_exibicao@henriquezimer.local' -Path 'OU=Usuários,$ou,OU=Pokémon,DC=henriqzimer,DC=local' -AccountPassword (ConvertTo-SecureString -AsPlainText '$pw' -force) -Enabled \$true
+New-ADUser -GivenName '$nome' -Surname '$sobrenome' -Name '$nome_ad' -DisplayName '$nome_exibicao' -SamAccountName '$sam_account_name' -UserPrincipalName '$nome_ad@henriqzimer.local' -Path 'OU=Usuários,$ou,OU=Setores,DC=henriqzimer,DC=local' -AccountPassword (ConvertTo-SecureString -AsPlainText '$senha_temporaria' -force) -Enabled \$true
 "
 
 echo -e "\e[1;32mUsuário criado com sucesso!\e[0m"
