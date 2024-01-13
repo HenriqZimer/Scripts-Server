@@ -6,13 +6,17 @@ clear
 # Mensagem de boas-vindas
 echo -e "\e[1;33mBem-vindo ao script de criação de usuário no Active Directory!\e[0m"
 echo -e "Por favor, forneça as seguintes informações:"
+echo -e "----------------------------------------------"
 
 # Etapa 1: Coletar informações do usuário
 read -p "Digite o nome do usuário: " nome
 read -p "Digite o sobrenome do usuário: " sobrenome
 
+# Limpar a tela
+clear
+
 # Apresentar opções numeradas para o setor
-echo "Escolha o setor:"
+echo -e "\e[1;33mEscolha o setor:\e[0m"
 echo "1. TI"
 echo "2. Comercial"
 echo "3. Outro"
@@ -39,8 +43,11 @@ nome_exibicao=$(echo "$nome_exibicao" | awk '{for(i=1;i<=NF;i++)$i=toupper(subst
 nome_ad="${nome}.${sobrenome}"
 nome_ad=$(echo "$nome_ad" | tr '[:upper:]' '[:lower:]')
 
+# Limpar a tela
+clear
+
 # Etapa 4: Coletar escolha da filial
-echo "Escolha a filial:"
+echo -e  "\e[1;33mEscolha a filial:\e[0m"
 echo "1. Fazenda"
 echo "2. Salseiros"
 
@@ -90,8 +97,15 @@ case "$escolha_filial" in
     exit 1;;
 esac
 
+# Limpar a tela
+clear
+
 # Etapa 6: Apresentar informações ao usuário
+echo -e "\e[1;33mConfirmação dos Dados do novo Usuário:\e[0m"
+echo -e "----------------------------------------------"
+
 echo -e "Setor: \e[1;32m$setor\e[0m"
+echo -e "Cargo: \e[1;32m$cargo\e[0m"
 echo -e "Filial: \e[1;32m$filial\e[0m"
 echo -e "Nome de Exibição (AD): \e[1;32m$nome_ad\e[0m"
 echo -e "Nome de Exibição (Computador): \e[1;32m$nome_exibicao\e[0m"
