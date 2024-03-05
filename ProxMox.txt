@@ -1,4 +1,0 @@
-Set-VMProcessor -VMName Palkia -ExposeVirtualizationExtensions $True
-Set-VMMemory -VMName Palkia -DynamicMemoryEnabled $false
-Set-VMProcessor -VMName Palkia -Count 2
-Set-VMNetworkAdapter -VMName Palkia -MacAddressSpoofing On
