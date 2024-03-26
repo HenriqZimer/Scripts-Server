@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+	<settings pass="oobeSystem">
+		<component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<Reseal>
+				<Mode>OOBE</Mode>
+			</Reseal>
+		</component>
+		<component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<InputLocale>0416:00010416</InputLocale>
+			<SystemLocale>pt-BR</SystemLocale>
+			<UILanguage>pt-BR</UILanguage>
+			<UILanguageFallback>pt-BR</UILanguageFallback>
+			<UserLocale>pt-BR</UserLocale>
+		</component>
+		<component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<TimeZone>E. South America Standard Time</TimeZone>
+			<OOBE>
+				<HideEULAPage>true</HideEULAPage>
+				<HideLocalAccountScreen>true</HideLocalAccountScreen>
+				<HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+				<HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+				<NetworkLocation>Home</NetworkLocation>
+				<ProtectYourPC>3</ProtectYourPC>
+				<SkipMachineOOBE>true</SkipMachineOOBE>
+				<SkipUserOOBE>true</SkipUserOOBE>
+			</OOBE>
+			<UserAccounts>
+				<DomainAccounts>
+					<DomainAccountList wcm:action="add">
+						<Domain>trustlog.local</Domain>
+						<DomainAccount wcm:action="add">
+							<Group>Users</Group>
+							<Name>Domain Users</Name>
+						</DomainAccount>
+					</DomainAccountList>
+				</DomainAccounts>
+				<LocalAccounts>
+					<LocalAccount wcm:action="add">
+						<DisplayName>Usuário</DisplayName>
+						<Group>Administrators</Group>
+						<Name>usuario</Name>
+						<Password>
+							<PlainText>true</PlainText>
+							<Value></Value>
+						</Password>
+					</LocalAccount>
+				</LocalAccounts>
+			</UserAccounts>
+		</component>
+	</settings>
+	<settings pass="specialize">
+		<component name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<SkipAutoActivation>true</SkipAutoActivation>
+		</component>
+		<component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<ComputerName>[Prompt]</ComputerName>
+			<CopyProfile>true</CopyProfile>
+		</component>
+		<component name="Microsoft-Windows-UnattendedJoin" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<Identification>
+				<JoinDomain>trustlog.local</JoinDomain>
+				<TimeoutPeriodInMinutes>2</TimeoutPeriodInMinutes>
+				<UnsecureJoin>false</UnsecureJoin>
+				<Credentials>
+					<Domain>trustlog.local</Domain>
+					<Password>Tag.2305@2021.</Password>
+					<Username>suporte01</Username>
+				</Credentials>
+			</Identification>
+		</component>
+	</settings>
+	<settings pass="windowsPE">
+		<component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<InputLocale>0416:00010416</InputLocale>
+			<SystemLocale>pt-BR</SystemLocale>
+			<UILanguage>pt-BR</UILanguage>
+			<UILanguageFallback>pt-BR</UILanguageFallback>
+			<UserLocale>pt-BR</UserLocale>
+			<SetupUILanguage>
+				<UILanguage>pt-BR</UILanguage>
+			</SetupUILanguage>
+		</component>
+		<component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<Diagnostics>
+				<OptIn>false</OptIn>
+			</Diagnostics>
+			<DynamicUpdate>
+				<Enable>false</Enable>
+				<WillShowUI>OnError</WillShowUI>
+			</DynamicUpdate>
+			<ImageInstall>
+				<OSImage>
+					<Compact>false</Compact>
+					<WillShowUI>OnError</WillShowUI>
+					<InstallFrom>
+						<MetaData wcm:action="add">
+							<Key>/IMAGE/INDEX</Key>
+							<Value>1</Value>
+						</MetaData>
+					</InstallFrom>
+				</OSImage>
+			</ImageInstall>
+			<UserData>
+				<AcceptEula>true</AcceptEula>
+				<FullName>NB-</FullName>
+				<ProductKey>
+					<Key>W269N-WFGWX-YVC9B-4J6C9-T83GX</Key>
+					<WillShowUI>Never</WillShowUI>
+				</ProductKey>
+			</UserData>
+		</component>
+	</settings>
+</unattend>

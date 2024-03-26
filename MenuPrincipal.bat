@@ -26,7 +26,7 @@ PowerShell.exe -ExecutionPolicy Bypass -File Scripts\ADUserPasswordReset.ps1
 goto menu
 
 :trocarTelefone
-PowerShell.exe -ExecutionPolicy Bypass -File Scripts\ADPhoneFax.ps1
+PowerShell.exe -ExecutionPolicy Bypass -File Scripts\ADPhoneMobile.ps1
 goto menu
 
 :fim
